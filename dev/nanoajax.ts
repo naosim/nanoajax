@@ -9,30 +9,30 @@ interface AjaxRequestParam {
   error: (statuscode: number) => void;
 }
 function nanoAjax(p: AjaxRequestParam){
-  var req: XMLHttpRequest = null;
-  if (window['ActiveXObject']) req = new ActiveXObject('Microsoft.XMLHTTP');
-  else if (window['XMLHttpRequest']) req = new XMLHttpRequest();
-  if(!req) return;
+  var r: XMLHttpRequest = null;
+  if (this.ActiveXObject) r = new ActiveXObject('Microsoft.XMLHTTP');
+  else if (this.XMLHttpRequest) r = new XMLHttpRequest();
+  if(!r) return;
   
-  req.onreadystatechange = () => {
-    if(req.readyState < 4) return;// not completed
+  r.onreadystatechange = () => {
+    if(r.readyState < 4) return;// not completed
     
-    if(req.status < 400) {// success
+    if(r.status < 400) {// success
       if(p.success) {
-        p.success(p.dataType == 'json' ? JSON.parse(req.responseText) : req.responseText, req.status);
+        p.success(p.dataType == 'json' ? JSON.parse(r.responseText) : r.responseText, r.status);
       }
     } else if(p.error) {// failed
-      p.error(req.status);
+      p.error(r.status);
     }
   };
 
   if (p.type == 'POST') {
-    req.open("POST", p.url, true);
-    req.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    req.setRequestHeader('Content-type', p.contentType || 'application/x-www-form-urlencoded');
+    r.open("POST", p.url, true);
+    r.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    r.setRequestHeader('Content-type', p.contentType || 'application/x-www-form-urlencoded');
   } else {
-    req.open("GET", p.url, true);
+    r.open("GET", p.url, true);
   }
 
-  req.send(p.data || '');
+  r.send(p.data || '');
 }
