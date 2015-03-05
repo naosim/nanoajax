@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<script src="nanoajax.js"></script>
+<script src="nanojsonp.js"></script>
+
+<h1>TEST</h1>
+<h2>nanoJsonp</h2>
+<ul>
+  <a href="#" onclick="nanoJsonp(shouldJsonpSuccess('/jsonp'))"><li>/jsonp is success</li></a>
+  <a href="#" onclick="nanoJsonp(shouldJsonpFailed('/jsonpp'))"><li>/jsonpp is error</li></a>
+</ul>
+
+
+<script>
+  var shouldJsonpSuccess = function(url) {
+    return {
+      url: url,
+      success: function(res) { console.log('ok', url); },
+      error: function(evt) { alert('assertFailed!! exp: success'); }
+    };
+  };
+  
+  var shouldJsonpFailed = function(url) {
+    return {
+      url: url,
+      success: function(res) { alert('assertFailed!! exp: error'); },
+      error: function(evt) { console.log('ok', url); }
+    };
+  };
+</script>
